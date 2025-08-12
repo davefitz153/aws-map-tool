@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Runtime: python3.10
+    Timeout: 10
+    Handler: lambda_function.lambda_handler
+    MemorySize: 128
+
+Parameters:
+  LambdaRoleArn:
+    Type: String
+    Description: "IAM Role ARN for Lambda execution"
+
+Resources:
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Ref LambdaRoleArn
+      CodeUri: ./lambdas/
+      Description: Python scripts to fetch dynamo data
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /datasets/{id}
+            Method: get

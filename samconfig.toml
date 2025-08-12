@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "get-datasets"
+resolve_s3 = true
+s3_prefix = "get-datasets"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+image_repositories = []
+parameter_overrides = "LambdaRoleArn=\"arn:aws:iam::980102314725:role/my-lambda-exec-role\""
