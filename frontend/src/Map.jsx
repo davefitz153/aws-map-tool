@@ -1,30 +1,49 @@
-import { useEffect, useState } from "react";
-import { Map as MapLibre, Source, Layer } from "react-map-gl/maplibre";
+import React, { useEffect, useState } from "react";
+import { Map, Source, Layer } from "@vis.gl/react-maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
 
-const API_URL = "https://a5ktzi32re.execute-api.us-east-1.amazonaws.com/Prod/datasets/earthquakes";
+export default function EarthquakeMap() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
-export default function Map() {
-  const [geoData, setGeoData] = useState(null);
-
+  // Fetch earthquake data from your API Gateway
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        // Convert API data to GeoJSON
-        const geojson = {
+    const fetchData = async () => {
+      try {
+        console.log("Fetching earthquake data...");
+        const res = await fetch("https://a5ktzi32re.execute-api.us-east-1.amazonaws.com/Prod/datasets/earthquakes");
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const json = await res.json();
+        console.log("Fetched data:", json);
+
+        // Convert to GeoJSON features
+        const features = json.map((point) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [point.lon, point.lat],
+          },
+          properties: {
+            magnitude: point.value,
+          },
+        }));
+
+        setData({
           type: "FeatureCollection",
-          features: data.map((d) => ({
-            type: "Feature",
-            geometry: { type: "Point", coordinates: [d.lon, d.lat] },
-            properties: { value: d.value },
-          })),
-        };
-        setGeoData(geojson);
-      })
-      .catch((err) => console.error("Failed to load earthquake data", err));
+          features,
+        });
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // Circle layer for earthquake points
+  if (error) return <div>Error: {error}</div>;
+
+  // Circle layer style
   const circleLayer = {
     id: "earthquake-circles",
     type: "circle",
@@ -32,33 +51,44 @@ export default function Map() {
       "circle-radius": [
         "interpolate",
         ["linear"],
-        ["get", "value"],
-        0, 2,
-        1, 4,
+        ["get", "magnitude"],
+        0, 2,       // magnitude 0 -> radius 2
+        1, 4,       // magnitude 1 -> radius 4
+        2, 6,
         3, 8,
-        5, 16,
-        7, 24,
+        4, 10,
+        5, 12,
+        6, 14,
+        7, 16,
+        8, 18,
+        9, 20
       ],
-      "circle-color": "#e63946",
-      "circle-opacity": 0.7,
+      "circle-color": "#FF5722",
+      "circle-opacity": 0.6,
+      "circle-stroke-color": "#B71C1C",
+      "circle-stroke-width": 1,
     },
   };
 
+  console.log(data)
+
   return (
-    <MapLibre
+    <div style={{ width: "100vw", height: "100vh" }}>
+    <Map
       initialViewState={{
         longitude: -122.744667053223,
         latitude: 38.7868347167969,
-        zoom: 5,
+        zoom: 3,
       }}
       style={{ width: "100%", height: "100vh" }}
       mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
     >
-      {geoData && (
-        <Source type="geojson" data={geoData}>
+      {data.features && (
+        <Source id="earthquakes" type="geojson" data={data}>
           <Layer {...circleLayer} />
         </Source>
       )}
-    </MapLibre>
+    </Map>
+    </div>
   );
 }
