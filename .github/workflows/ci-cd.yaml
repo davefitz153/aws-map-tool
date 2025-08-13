@@ -25,20 +25,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r lambdas/requirements.txt
-          # pytest tests/
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: '1.12.2'
 
-      - name: Terraform Init & Validate
-        working-directory: ./infra
-        run: |
-          terraform init -input=false
-          terraform validate
-
-      # Configure AWS credentials (scoped to deploy steps)
+      # Configure AWS credentials (available to Terraform)
       - name: Configure AWS credentials
         if: github.ref == 'refs/heads/main'
         uses: aws-actions/configure-aws-credentials@v4
@@ -46,6 +39,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
+      # Terraform Init & Validate
+      - name: Terraform Init & Validate
+        working-directory: ./infra
+        run: |
+          terraform init -input=false
+          terraform validate
+
 
       # Deploy Terraform infrastructure
       - name: Deploy Terraform infrastructure
