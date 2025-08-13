@@ -59,6 +59,12 @@ resource "aws_iam_user_policy" "deploy_policy" {
           "s3:GetObject",
           "s3:DeleteObject",
           "s3:ListBucket",
+          "s3:GetBucketPolicy",
+          "s3:GetBucketAcl",
+          "s3:GetBucketCORS",
+          "s3:GetBucketWebsite",
+          "s3:GetBucketVersioning",
+          "s3:GetAccelerateConfiguration",
 
           # Lambda
           "lambda:*",
