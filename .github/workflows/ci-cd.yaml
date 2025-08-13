@@ -61,9 +61,9 @@ jobs:
 
 
       # Optional: Build and deploy React frontend
-      # - name: Build and deploy React frontend
-      #   run: |
-      #     cd frontend
-      #     npm ci
-      #     npm run build
-      #     aws s3 sync build/ s3://your-frontend-bucket-name
+      - name: Build and deploy React frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+          aws s3 sync dist/ s3://mapapp-frontend --delete
