@@ -73,7 +73,9 @@ resource "aws_iam_user_policy" "deploy_policy" {
           "cloudformation:*",
 
           # IAM for Lambda execution role pass
-          "iam:PassRole"
+          "iam:PassRole",
+          "iam:GetRole",
+          "iam:GetUser"
         ]
         Resource = "*"
       }
