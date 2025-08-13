@@ -12,9 +12,14 @@ echo "Lambda Role ARN: $LAMBDA_ROLE_ARN"
 echo "Building SAM application..."
 sam build
 
+echo "Validating SAM..."
+sam validate
+
 echo "Deploying SAM application..."
+
 sam deploy \
   --stack-name get-datasets \
   --parameter-overrides LambdaRoleArn="$LAMBDA_ROLE_ARN" \
   --capabilities CAPABILITY_NAMED_IAM \
-  --guided
+  --no-confirm-changeset \
+  --no-fail-on-empty-changeset
