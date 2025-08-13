@@ -23,5 +23,6 @@ resource "aws_dynamodb_table" "datasets" {
   tags = {
     Environment = var.environment
     Project     = "Map Tool"
+    TestDeploy = "true"
   }
 }
