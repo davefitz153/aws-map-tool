@@ -4,3 +4,5 @@ __pycache__/
 .aws-sam/
 *.pyc
 .env
+*.tfstate
+*.tfstate.backup
