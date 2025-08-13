@@ -86,7 +86,8 @@ resource "aws_iam_user_policy" "deploy_policy" {
           # SSM Parameter Store (read)
           "ssm:GetParameter",
           "ssm:GetParameters",
-          "ssm:DescribeParameters"        
+          "ssm:DescribeParameters",  
+          "ssm:ListTagsForResource"     
         ]
         Resource = "*"
       }
