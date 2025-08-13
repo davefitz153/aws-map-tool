@@ -27,8 +27,4 @@ Resources:
           Type: Api
           Properties:
             Path: /datasets/{id}
-            Method: get
-            Cors:
-              AllowMethods: "'GET,OPTIONS'"
-              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              AllowOrigin: "'*'"            
+            Method: get         
