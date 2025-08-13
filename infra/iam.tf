@@ -65,6 +65,15 @@ resource "aws_iam_user_policy" "deploy_policy" {
           "s3:GetBucketWebsite",
           "s3:GetBucketVersioning",
           "s3:GetAccelerateConfiguration",
+          "s3:GetBucketRequestPayment",
+          "s3:GetBucketLogging",
+          "s3:GetLifecycleConfiguration",
+          "s3:GetReplicationConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:GetBucketObjectLockConfiguration",
+          "s3:GetBucketLocation",
+          "s3:GetBucketTagging",
+          "s3:GetBucketPublicAccessBlock",
 
           # Lambda
           "lambda:*",
