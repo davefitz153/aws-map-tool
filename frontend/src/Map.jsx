@@ -70,10 +70,7 @@ export default function EarthquakeMap() {
     },
   };
 
-  console.log(data)
-
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
     <Map
       initialViewState={{
         longitude: -122.744667053223,
@@ -89,6 +86,5 @@ export default function EarthquakeMap() {
         </Source>
       )}
     </Map>
-    </div>
   );
 }
